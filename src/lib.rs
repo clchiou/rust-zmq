@@ -601,6 +601,13 @@ where
     }
 }
 
+impl Sendable for &mut Message {
+    fn send(self, socket: &Socket, flags: i32) -> Result<()> {
+        zmq_try!(unsafe { zmq_sys::zmq_msg_send(msg_ptr(self), socket.sock, flags as c_int) });
+        Ok(())
+    }
+}
+
 impl Socket {
     /// Consume the Socket and return the raw socket pointer.
     ///
